@@ -24,5 +24,5 @@ Repositorio utilizado para almacenar ejercicios, prácticas y proyectos realizad
 Abraham Chinchilla Aguilar
 
 ## 🎓 Curso
-Desarrollo de Aplicaciones
+Desarrollo de Aplicaciones Web y Patrones
 Universidad Fidélitas
