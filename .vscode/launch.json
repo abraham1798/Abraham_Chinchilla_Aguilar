@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-Clase4baseApplication<com.ufide-clase4base>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.ufide.clase4base.Clase4baseApplication",
+            "projectName": "com.ufide-clase4base",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
