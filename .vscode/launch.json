@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "TiendaappApplication",
+            "request": "launch",
+            "mainClass": "com.ufide.tiendaapp.TiendaappApplication",
+            "projectName": ""
+        },
+        {
+            "type": "java",
             "name": "Spring Boot-Clase4baseApplication<com.ufide-clase4base>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
