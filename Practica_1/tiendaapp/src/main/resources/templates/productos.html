@@ -92,6 +92,19 @@
             </div>
         </div>
     </div>
+```html
+<span class="badge bg-info mb-2" th:text="${producto.categoria}">categoria</span>
+
+<span th:if="${producto.bajoStock}"
+      class="badge bg-warning text-dark">
+  Pocas unidades
+</span>
+
+<span th:if="${producto.agotado}"
+      class="badge bg-danger">
+  Agotado
+</span>
+```
 
 </main>
 
