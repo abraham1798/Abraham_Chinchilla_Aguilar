@@ -39,4 +39,7 @@ public class LibroService {
     //
     // (y el equivalente para devolver una copia)
     // ==========================================================
+    public void eliminar(Long id) {
+    libroRepository.deleteById(id);
+}
 }

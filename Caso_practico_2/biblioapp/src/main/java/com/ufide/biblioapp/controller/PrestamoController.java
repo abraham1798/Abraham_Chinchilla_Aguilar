@@ -13,6 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+
 @Controller
 @RequestMapping("/prestamos")
 public class PrestamoController {
@@ -26,6 +29,8 @@ public class PrestamoController {
     @Autowired
     private UsuarioService usuarioService;
 
+    @PreAuthorize("hasRole(T(com.ufide.biblioapp.entity.Rol).BIBLIOTECARIO.name())")
+
     // Mostrar todos los prestamos
     @GetMapping
     public String listar(Model model) {
@@ -37,6 +42,7 @@ public class PrestamoController {
         return "prestamos/lista";
     }
 
+    @PreAuthorize("hasRole(T(com.ufide.biblioapp.entity.Rol).BIBLIOTECARIO.name())")
     // Mostrar formulario para registrar un prestamo
     @GetMapping("/nuevo")
     public String nuevo(Model model) {
@@ -79,6 +85,7 @@ public class PrestamoController {
         return "redirect:/prestamos";
     }
 
+    @PreAuthorize("hasRole(T(com.ufide.biblioapp.entity.Rol).BIBLIOTECARIO.name())")
     // Registrar devolucion
     @PostMapping("/{id}/devolver")
     public String devolver(@PathVariable Long id) {
@@ -86,5 +93,18 @@ public class PrestamoController {
         prestamoService.registrarDevolucion(id);
 
         return "redirect:/prestamos";
+    }
+
+    @PreAuthorize("hasRole(T(com.ufide.biblioapp.entity.Rol).LECTOR.name())")
+    @GetMapping("/mis")
+    public String misPrestamos(Authentication auth, Model model) {
+
+        Usuario usuario = usuarioService.buscarPorUsername(auth.getName());
+
+        model.addAttribute(
+                "prestamos",
+                prestamoService.listarPorUsuario(usuario));
+
+        return "prestamos/lista";
     }
 }

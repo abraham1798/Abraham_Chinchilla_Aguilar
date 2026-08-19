@@ -7,6 +7,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+
 // ==========================================================
 // CASO PRACTICO 2 - REQUISITO 3:
 // Esta configuracion hoy deja pasar a CUALQUIER usuario logueado
@@ -21,6 +23,7 @@ import org.springframework.security.web.SecurityFilterChain;
 //      correspondiente (no hace falta listarlas todas aca).
 // ==========================================================
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean
@@ -31,19 +34,28 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/libros", "/libros/**", "/login", "/css/**", "/js/**").permitAll()
-                .anyRequest().authenticated()
-            )
-            .formLogin(form -> form
-                .loginPage("/login")
-                .defaultSuccessUrl("/libros", true)
-                .permitAll()
-            )
-            .logout(logout -> logout
-                .logoutSuccessUrl("/login?logout")
-                .permitAll()
-            );
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/libros",
+                                "/libros/**",
+                                "/login",
+                                "/css/**",
+                                "/403",
+                                "/js/**")
+                        .permitAll()
+                        .anyRequest().authenticated())
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/libros", true)
+                        .permitAll())
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/login?logout")
+
+                        .permitAll())
+                .exceptionHandling(exception -> exception
+                        .accessDeniedPage("/403")
+
+                );
 
         return http.build();
     }
