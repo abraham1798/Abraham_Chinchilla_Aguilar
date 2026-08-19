@@ -41,4 +41,11 @@ public class UsuarioService implements UserDetailsService {
     // validarRol(...) que viste en la Semana 12 (UsuarioService
     // de cursosapp).
     // ==========================================================
+    public List<Usuario> listar() {
+        return usuarioRepository.findAll();
+    }
+
+    public Usuario buscarPorId(Long id) {
+        return usuarioRepository.findById(id).orElse(null);
+    }
 }
