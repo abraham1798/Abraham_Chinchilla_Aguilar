@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: head('Préstamos')}"></head>
+
+<body>
+
+<div class="container mt-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Préstamos</h2>
+
+        <a th:href="@{/prestamos/nuevo}" class="btn btn-primary">
+            Registrar préstamo
+        </a>
+    </div>
+
+    <div class="table-responsive">
+
+        <table class="table table-bordered table-hover">
+
+            <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Libro</th>
+                <th>Usuario</th>
+                <th>Fecha préstamo</th>
+                <th>Fecha límite</th>
+                <th>Fecha devolución</th>
+                <th>Estado</th>
+                <th>Acción</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            <tr th:each="prestamo : ${prestamos}">
+
+                <td th:text="${prestamo.id}"></td>
+
+                <td th:text="${prestamo.libro.titulo}"></td>
+
+                <td th:text="${prestamo.usuario.nombreCompleto}"></td>
+
+                <td th:text="${prestamo.fechaPrestamo}"></td>
+
+                <td th:text="${prestamo.fechaLimite}"></td>
+
+                <td th:text="${prestamo.fechaDevolucion != null
+                              ? prestamo.fechaDevolucion
+                              : '-'}">
+                </td>
+
+                <td>
+                    <span th:if="${prestamo.fechaDevolucion == null}"
+                          class="badge bg-warning text-dark">
+                        Prestado
+                    </span>
+
+                    <span th:if="${prestamo.fechaDevolucion != null}"
+                          class="badge bg-success">
+                        Devuelto
+                    </span>
+                </td>
+
+                <td>
+
+                    <form th:if="${prestamo.fechaDevolucion == null}"
+                          th:action="@{/prestamos/{id}/devolver(id=${prestamo.id})}"
+                          method="post">
+
+                        <button type="submit"
+                                class="btn btn-success btn-sm">
+                            Devolver
+                        </button>
+
+                    </form>
+
+                </td>
+
+            </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <a th:href="@{/libros}" class="btn btn-secondary">
+        Volver al catálogo
+    </a>
+
+</div>
+
+</body>
+</html>
