@@ -26,11 +26,10 @@ public class LibroRestController {
     public ResponseEntity<List<Libro>> listar() {
 
         return ResponseEntity.ok(
-                libroService.listar()
-        );
+                libroService.listar());
     }
 
-    // GET /api/libros/{id}
+    // GET /api/libros
     // Devuelve 200 si existe o 404 si no existe
     @GetMapping("/{id}")
     public ResponseEntity<Libro> buscarPorId(@PathVariable Long id) {
@@ -55,5 +54,13 @@ public class LibroRestController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(libroGuardado);
+    }
+
+    @GetMapping("/categoria/{categoria}")
+    public ResponseEntity<List<Libro>> buscarPorCategoria(
+            @PathVariable String categoria) {
+
+        return ResponseEntity.ok(
+                libroService.listarPorCategoria(categoria));
     }
 }

@@ -32,14 +32,18 @@ public class LibroService {
     // vas a necesitar descontar/sumar copiasDisponibles aca. Un
     // metodo util podria ser:
     //
-    //   public void descontarCopia(Libro libro) {
-    //       libro.setCopiasDisponibles(libro.getCopiasDisponibles() - 1);
-    //       libroRepository.save(libro);
-    //   }
+    // public void descontarCopia(Libro libro) {
+    // libro.setCopiasDisponibles(libro.getCopiasDisponibles() - 1);
+    // libroRepository.save(libro);
+    // }
     //
     // (y el equivalente para devolver una copia)
     // ==========================================================
     public void eliminar(Long id) {
-    libroRepository.deleteById(id);
-}
+        libroRepository.deleteById(id);
+    }
+
+    public List<Libro> listarPorCategoria(String categoria) {
+        return libroRepository.findByCategoriaIgnoreCase(categoria);
+    }
 }

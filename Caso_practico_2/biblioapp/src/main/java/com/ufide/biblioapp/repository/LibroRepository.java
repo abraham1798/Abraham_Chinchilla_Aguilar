@@ -3,6 +3,8 @@ package com.ufide.biblioapp.repository;
 import com.ufide.biblioapp.entity.Libro;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface LibroRepository extends JpaRepository<Libro, Long> {
 
     // ==========================================================
@@ -17,4 +19,5 @@ public interface LibroRepository extends JpaRepository<Libro, Long> {
     // PrestamoRepository, que vos vas a crear junto con la
     // entidad Prestamo.
     // ==========================================================
+    List<Libro> findByCategoriaIgnoreCase(String categoria);
 }
