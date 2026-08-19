@@ -2,26 +2,13 @@ package com.ufide.biblioapp.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-
-// ==========================================================
-// CASO PRACTICO 2 - REQUISITO 3:
-// Esta configuracion hoy deja pasar a CUALQUIER usuario logueado
-// a CUALQUIER ruta (con .authenticated()). Tu trabajo es:
-//
-//   1. Agregar @EnableMethodSecurity arriba de esta clase (para
-//      que funcionen los @PreAuthorize que vas a poner en los
-//      controllers).
-//   2. Dejar /libros y /api/libros (GET) como publico (catalogo).
-//   3. Dejar el resto de rutas de escritura protegidas por rol
-//      usando @PreAuthorize en el metodo del controller
-//      correspondiente (no hace falta listarlas todas aca).
-// ==========================================================
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
@@ -33,29 +20,64 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/libros",
-                                "/libros/**",
-                                "/login",
-                                "/css/**",
-                                "/403",
-                                "/js/**")
-                        .permitAll()
-                        .anyRequest().authenticated())
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/libros", true)
-                        .permitAll())
-                .logout(logout -> logout
-                        .logoutSuccessUrl("/login?logout")
+            // Ignorar CSRF para la API y para el login de Postman
+            .csrf(csrf -> csrf
+                .ignoringRequestMatchers(
+                    "/api/**",
+                    "/procesar-login"
+                )
+            )
 
-                        .permitAll())
-                .exceptionHandling(exception -> exception
-                        .accessDeniedPage("/403")
+            .authorizeHttpRequests(auth -> auth
 
-                );
+                // Paginas publicas
+                .requestMatchers(
+                    "/libros",
+                    "/libros/**",
+                    "/login",
+                    "/procesar-login",
+                    "/403",
+                    "/css/**",
+                    "/js/**"
+                ).permitAll()
+
+                // API publica solamente para consultas GET
+                .requestMatchers(
+                    HttpMethod.GET,
+                    "/api/libros",
+                    "/api/libros/**"
+                ).permitAll()
+
+                // Todo lo demas requiere autenticacion
+                .anyRequest().authenticated()
+            )
+
+            .formLogin(form -> form
+                // Pagina que muestra el formulario
+                .loginPage("/login")
+
+                // URL que procesa username y password
+                .loginProcessingUrl("/procesar-login")
+
+                // Si el login es correcto
+                .defaultSuccessUrl("/libros", true)
+
+                // Si usuario o password son incorrectos
+                .failureUrl("/login?error")
+
+                .permitAll()
+            )
+
+            .logout(logout -> logout
+                .logoutSuccessUrl("/login?logout")
+                .permitAll()
+            )
+
+            .exceptionHandling(exception -> exception
+                .accessDeniedPage("/403")
+            );
 
         return http.build();
     }
