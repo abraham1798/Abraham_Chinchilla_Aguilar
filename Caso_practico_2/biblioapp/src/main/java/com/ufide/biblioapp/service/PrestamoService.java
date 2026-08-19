@@ -51,8 +51,7 @@ public class PrestamoService {
         // Validar que existan copias disponibles
         if (libro.getCopiasDisponibles() <= 0) {
             throw new IllegalStateException(
-                    "No hay copias disponibles de este libro"
-            );
+                    "No hay copias disponibles de este libro");
         }
 
         // Fecha en que se realiza el prestamo
@@ -68,8 +67,7 @@ public class PrestamoService {
 
         // Descontar una copia disponible
         libro.setCopiasDisponibles(
-                libro.getCopiasDisponibles() - 1
-        );
+                libro.getCopiasDisponibles() - 1);
 
         // Guardar el libro actualizado
         libroRepository.save(libro);
@@ -87,31 +85,33 @@ public class PrestamoService {
         // Validar que el prestamo exista
         if (prestamo == null) {
             throw new IllegalArgumentException(
-                    "Prestamo no encontrado"
-            );
+                    "Prestamo no encontrado");
         }
 
         // Evitar registrar dos veces la devolucion
         if (prestamo.getFechaDevolucion() != null) {
             throw new IllegalStateException(
-                    "Este prestamo ya fue devuelto"
-            );
+                    "Este prestamo ya fue devuelto");
         }
 
-        // Registrar fecha de devolucion
+        // Registra fecha de devolucion
         prestamo.setFechaDevolucion(LocalDate.now());
 
         Libro libro = prestamo.getLibro();
 
         // Devolver la copia al inventario
         libro.setCopiasDisponibles(
-                libro.getCopiasDisponibles() + 1
-        );
+                libro.getCopiasDisponibles() + 1);
 
         // Guardar libro actualizado
         libroRepository.save(libro);
 
         // Guardar prestamo actualizado
         return prestamoRepository.save(prestamo);
+    }
+
+    // libros que no han sido devueltos despues de su fecha maxima
+    public List<Prestamo> listarAtrasados() {
+        return prestamoRepository.prestamosAtrasados();
     }
 }

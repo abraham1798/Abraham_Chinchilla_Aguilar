@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: head('Préstamos atrasados')}"></head>
+
+<body>
+
+<div class="container mt-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Préstamos atrasados</h2>
+
+        <a th:href="@{/prestamos}" class="btn btn-secondary">
+            Volver a préstamos
+        </a>
+    </div>
+
+    <div class="alert alert-danger">
+        Préstamos que superaron su fecha límite y todavía no han sido devueltos.
+    </div>
+
+    <table class="table table-bordered table-hover">
+
+        <thead class="table-danger">
+        <tr>
+            <th>ID</th>
+            <th>Libro</th>
+            <th>Usuario</th>
+            <th>Fecha préstamo</th>
+            <th>Fecha límite</th>
+            <th>Estado</th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        <tr th:each="prestamo : ${prestamos}">
+
+            <td th:text="${prestamo.id}"></td>
+
+            <td th:text="${prestamo.libro.titulo}"></td>
+
+            <td th:text="${prestamo.usuario.nombreCompleto}"></td>
+
+            <td th:text="${prestamo.fechaPrestamo}"></td>
+
+            <td th:text="${prestamo.fechaLimite}"></td>
+
+            <td>
+                <span class="badge bg-danger">
+                    ATRASADO
+                </span>
+            </td>
+
+        </tr>
+
+        </tbody>
+
+    </table>
+
+    <div th:if="${#lists.isEmpty(prestamos)}"
+         class="alert alert-success">
+        No hay préstamos atrasados.
+    </div>
+
+</div>
+
+</body>
+</html>

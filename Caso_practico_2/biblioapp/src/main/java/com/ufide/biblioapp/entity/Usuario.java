@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 
 import jakarta.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "usuarios")
 public class Usuario {
@@ -18,6 +20,7 @@ public class Usuario {
     @Column(unique = true)
     private String username;
 
+    @JsonIgnore
     @NotBlank
     private String password;
 

@@ -107,4 +107,15 @@ public class PrestamoController {
 
         return "prestamos/lista";
     }
+
+    @PreAuthorize("hasRole(T(com.ufide.biblioapp.entity.Rol).BIBLIOTECARIO.name())")
+    @GetMapping("/atrasados")
+    public String atrasados(Model model) {
+
+        model.addAttribute(
+                "prestamos",
+                prestamoService.listarAtrasados());
+
+        return "prestamos/atrasados";
+    }
 }

@@ -6,7 +6,8 @@
     <h2 class="mb-4">Ingresar a BiblioApp</h2>
     <div th:if="${param.error}" class="alert alert-danger">Usuario o contrasena incorrectos.</div>
     <div th:if="${param.logout}" class="alert alert-success">Sesion cerrada correctamente.</div>
-    <form th:action="@{/login}" method="post">
+    
+    <form th:action="@{/procesar-login}" method="post">
         <div class="mb-3">
             <label class="form-label">Usuario</label>
             <input type="text" name="username" class="form-control" required>
